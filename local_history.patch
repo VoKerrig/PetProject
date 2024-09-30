@@ -1,0 +1,779 @@
+Index: app/src/main/java/ru/startandroid/develop/autentification/auth/HomePage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/auth/HomePage.kt b/app/src/main/java/ru/startandroid/develop/autentification/auth/HomePage.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/auth/HomePage.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/auth/HomePage.kt	(date 1725133790235)
+@@ -1,6 +1,5 @@
+ package ru.startandroid.develop.autentification.auth
+ 
+-import android.widget.Toast
+ import androidx.compose.foundation.layout.Arrangement
+ import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.fillMaxSize
+@@ -11,6 +10,7 @@
+ import androidx.compose.runtime.livedata.observeAsState
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
++import androidx.compose.ui.unit.sp
+ import androidx.navigation.NavController
+ 
+ @Composable
+@@ -37,4 +37,5 @@
+             Text(text = "Sign out")
+         }
+     }
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/ru/startandroid/develop/autentification/auth/LoginPage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/auth/LoginPage.kt b/app/src/main/java/ru/startandroid/develop/autentification/auth/LoginPage.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/auth/LoginPage.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/auth/LoginPage.kt	(date 1725133790232)
+@@ -1,5 +1,6 @@
+ package ru.startandroid.develop.autentification.auth
+ 
++import android.widget.Toast
+ import androidx.compose.foundation.layout.Arrangement
+ import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.Spacer
+@@ -10,12 +11,15 @@
+ import androidx.compose.material3.TextButton
+ import androidx.compose.material3.TextField
+ import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
+ import androidx.compose.runtime.getValue
++import androidx.compose.runtime.livedata.observeAsState
+ import androidx.compose.runtime.mutableStateOf
+ import androidx.compose.runtime.remember
+ import androidx.compose.runtime.setValue
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
+ import androidx.compose.ui.unit.dp
+ import androidx.compose.ui.unit.sp
+ import androidx.navigation.NavController
+@@ -29,6 +33,17 @@
+     var password by remember {
+         mutableStateOf("")
+     }
++    val authState = authViewModel.authState.observeAsState()
++    val context = LocalContext.current
++
++    LaunchedEffect(authState.value) {
++        when(authState.value){
++            is AuthState.Authenticated -> navController.navigate("home_page")
++            is AuthState.Error -> Toast.makeText(context,
++                (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
++            else -> Unit
++        }
++    }
+ 
+     Column(
+         modifier = Modifier.fillMaxSize(),
+@@ -62,7 +77,7 @@
+         Spacer(modifier = Modifier.height(16.dp))
+         
+         Button(onClick = {
+-                
++                authViewModel.login(email, password)
+             }) {
+             Text(text = "Login")
+         }
+Index: app/src/main/java/ru/startandroid/develop/autentification/auth/MyAppNavigation.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/auth/MyAppNavigation.kt b/app/src/main/java/ru/startandroid/develop/autentification/auth/MyAppNavigation.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/auth/MyAppNavigation.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/auth/MyAppNavigation.kt	(date 1725133790230)
+@@ -6,7 +6,7 @@
+ import androidx.navigation.compose.rememberNavController
+ 
+ @Composable
+-fun AppNavigation(authViewModel: AuthViewModel) {
++fun MyAppNavigation(authViewModel: AuthViewModel) {
+     val navController = rememberNavController()
+ 
+     NavHost(navController = navController, startDestination = "login_page") {
+Index: app/src/main/java/ru/startandroid/develop/autentification/login/LoginButton.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/login/LoginButton.kt b/app/src/main/java/ru/startandroid/develop/autentification/login/LoginButton.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/login/LoginButton.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/login/LoginButton.kt	(date 1725133790228)
+@@ -9,7 +9,7 @@
+ import androidx.compose.ui.Modifier
+ 
+ @Composable
+-fun LoginButton(
++fun LoginButton_(
+     text: String,
+     onClick: () -> Unit
+ ) {
+Index: app/src/main/java/ru/startandroid/develop/autentification/login/LoginScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/login/LoginScreen.kt b/app/src/main/java/ru/startandroid/develop/autentification/login/LoginScreen.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/login/LoginScreen.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/login/LoginScreen.kt	(date 1725133790224)
+@@ -1,5 +1,6 @@
+ package ru.startandroid.develop.autentification.login
+ 
++import android.widget.Toast
+ import androidx.compose.foundation.Image
+ import androidx.compose.foundation.background
+ import androidx.compose.foundation.layout.Arrangement
+@@ -11,33 +12,50 @@
+ import androidx.compose.foundation.layout.fillMaxWidth
+ import androidx.compose.foundation.layout.height
+ import androidx.compose.foundation.layout.padding
++import androidx.compose.material3.Button
++import androidx.compose.material3.Text
++import androidx.compose.material3.TextButton
+ import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.livedata.observeAsState
+ import androidx.compose.runtime.mutableStateOf
+ import androidx.compose.runtime.remember
++import androidx.compose.runtime.setValue
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.layout.ContentScale
++import androidx.compose.ui.platform.LocalContext
+ import androidx.compose.ui.res.painterResource
+ import androidx.compose.ui.unit.dp
+-import com.google.firebase.auth.ktx.auth
+-import com.google.firebase.ktx.Firebase
+-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
++import androidx.navigation.NavController
+ import ru.startandroid.develop.autentification.R
++import ru.startandroid.develop.autentification.authentication.AuthState
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
+ import ru.startandroid.develop.autentification.ui.theme.BarColor
+ 
+ @Composable
+-fun LoginScreen() {
+-
+-    val auth = Firebase.auth
+-
+-    val emailState = remember {
++fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
++    var emailState by remember {
+         mutableStateOf("")
+     }
+-    val passwordState = remember {
++    var passwordState by remember {
+         mutableStateOf("")
+     }
++    val authState = authViewModel.authState.observeAsState()
++    val context = LocalContext.current
+ 
+-    Column( modifier = Modifier
++    LaunchedEffect(authState.value) {
++        when(authState.value){
++            is AuthState.Authenticated -> navController.navigate("home_screen")
++            is AuthState.Error -> Toast.makeText(context,
++                (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
++            else -> Unit
++        }
++    }
++
++    Column(
++        modifier = Modifier
+         .fillMaxSize(),
+         horizontalAlignment = Alignment.CenterHorizontally
+     ) {
+@@ -51,25 +69,30 @@
+             verticalArrangement = Arrangement.Bottom
+         ) {
+             EmailTextField(
+-                text = emailState.value,
++                text = emailState,
+                 label = "mail@example.com"
+             ) {
+-                emailState.value = it
++                emailState = it
+             }
+             Spacer(modifier = Modifier.height(10.dp))
+             PasswordTextField(
+-                text = passwordState.value,
++                text = passwordState,
+                 label = "Password"
+             ) {
+-                passwordState.value = it
++                passwordState = it
+             }
+             Spacer(modifier = Modifier.height(10.dp))
+-            LoginButton(text = "Войти") {
+-                signIn(auth, emailState.value, passwordState.value)
++            Button(onClick = {
++                authViewModel.login(emailState,passwordState)
++            }) {
++                Text(text = "Login")
+             }
+             Spacer(modifier = Modifier.height(10.dp))
+-            LoginButton(text = "Регистрация") {
+-                signUp(auth, emailState.value, passwordState.value)
++
++            TextButton(onClick = {
++                navController.navigate("signup_screen")
++            }) {
++                Text(text = "Нет аккаунта? Зарегистрируйтесь")
+             }
+         }
+         Box(
+@@ -84,6 +107,5 @@
+                 contentScale = ContentScale.Crop
+             )
+         }
+-
+     }
+-}
++}
+\ No newline at end of file
+Index: app/src/main/java/ru/startandroid/develop/autentification/login/SignUpScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/login/SignUpScreen.kt b/app/src/main/java/ru/startandroid/develop/autentification/login/SignUpScreen.kt
+new file mode 100644
+--- /dev/null	(date 1725133790222)
++++ b/app/src/main/java/ru/startandroid/develop/autentification/login/SignUpScreen.kt	(date 1725133790222)
+@@ -0,0 +1,112 @@
++package ru.startandroid.develop.autentification.login
++
++import android.widget.Toast
++import androidx.compose.foundation.Image
++import androidx.compose.foundation.background
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Box
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.Spacer
++import androidx.compose.foundation.layout.fillMaxHeight
++import androidx.compose.foundation.layout.fillMaxSize
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.height
++import androidx.compose.foundation.layout.padding
++import androidx.compose.material3.Button
++import androidx.compose.material3.Text
++import androidx.compose.material3.TextButton
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.livedata.observeAsState
++import androidx.compose.runtime.mutableStateOf
++import androidx.compose.runtime.remember
++import androidx.compose.runtime.setValue
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.layout.ContentScale
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.res.painterResource
++import androidx.compose.ui.unit.dp
++import androidx.navigation.NavController
++import ru.startandroid.develop.autentification.R
++import ru.startandroid.develop.autentification.authentication.AuthState
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
++import ru.startandroid.develop.autentification.ui.theme.BarColor
++
++@Composable
++fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
++    var emailState by remember {
++        mutableStateOf("")
++    }
++    var passwordState by remember {
++        mutableStateOf("")
++    }
++
++    val authState = authViewModel.authState.observeAsState()
++    val context = LocalContext.current
++
++    LaunchedEffect(authState.value) {
++        when(authState.value) {
++            is AuthState.Authenticated -> navController.navigate("home_screen")
++            is AuthState.Error -> Toast.makeText(context,
++                (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
++            else -> Unit
++        }
++    }
++
++    Column(
++        modifier = Modifier
++            .fillMaxSize(),
++        horizontalAlignment = Alignment.CenterHorizontally
++    ) {
++        Column(
++            modifier = Modifier
++                .fillMaxWidth()
++                .fillMaxHeight(0.6f)
++                .background(color = BarColor)
++                .padding(start = 40.dp, end = 40.dp),
++            horizontalAlignment = Alignment.CenterHorizontally,
++            verticalArrangement = Arrangement.Bottom
++        ) {
++            EmailTextField(
++                text = emailState,
++                label = "mail@example.com"
++            ) {
++                emailState = it
++            }
++            Spacer(modifier = Modifier.height(10.dp))
++            PasswordTextField(
++                text = passwordState,
++                label = "Password"
++            ) {
++                passwordState = it
++            }
++            Spacer(modifier = Modifier.height(10.dp))
++            Button(onClick = {
++                authViewModel.signup(emailState, passwordState)
++            }) {
++                Text(text = "Register")
++            }
++            Spacer(modifier = Modifier.height(10.dp))
++
++            TextButton(onClick = {
++                navController.navigate("signup_screen")
++            }) {
++                Text(text = "Нет аккаунта? Зарегистрируйтесь")
++            }
++        }
++        Box(
++            modifier = Modifier
++                .fillMaxSize()
++                .background(color = BarColor),
++            contentAlignment = Alignment.Center
++        ) {
++            Image(
++                painter = painterResource(id = R.drawable.auth_pic),
++                contentDescription = "background",
++                contentScale = ContentScale.Crop
++            )
++        }
++    }
++}
+Index: app/src/main/java/ru/startandroid/develop/autentification/mainscreen/HomeScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/HomeScreen.kt b/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/HomeScreen.kt
+new file mode 100644
+--- /dev/null	(date 1725133790208)
++++ b/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/HomeScreen.kt	(date 1725133790208)
+@@ -0,0 +1,43 @@
++package ru.startandroid.develop.autentification.mainscreen
++
++import android.annotation.SuppressLint
++import androidx.compose.foundation.layout.fillMaxSize
++import androidx.compose.material3.Surface
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.runtime.livedata.observeAsState
++import androidx.compose.ui.Modifier
++import androidx.navigation.NavController
++import androidx.navigation.compose.NavHost
++import androidx.navigation.compose.composable
++import androidx.navigation.compose.rememberNavController
++import ru.startandroid.develop.autentification.Routs
++import ru.startandroid.develop.autentification.authentication.AuthState
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
++import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
++
++@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
++@Composable
++fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
++    val authState = authViewModel.authState.observeAsState()
++
++    LaunchedEffect(authState.value) {
++        when(authState.value){
++            is AuthState.Unauthenticated -> navController.navigate("login_screen")
++            else -> Unit
++        }
++    }
++
++    Surface(
++        modifier = Modifier.fillMaxSize()
++    ) {
++        val navMainController = rememberNavController()
++        NavHost(navController = navMainController, startDestination = Routs.Home.route) {
++            composable(Routs.Home.route){
++                NavigationDrawerProfile(
++                    navController = navMainController
++                )
++            }
++        }
++    }
++}
+Index: app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerItem.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerItem.kt b/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerItem.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerItem.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerItem.kt	(date 1725133790213)
+@@ -5,15 +5,17 @@
+ import androidx.compose.material.icons.filled.Info
+ import androidx.compose.material.icons.filled.Settings
+ import androidx.compose.ui.graphics.vector.ImageVector
++import androidx.navigation.NavController
+ import ru.startandroid.develop.autentification.Routs
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
+ 
+ sealed class NavigationDrawerItem(
+     val title: String,
+     val selectedIcon: ImageVector,
+     val unselectedIcon: ImageVector,
+-    val route: String
++    val route: String,
+ ) {
+-    object Main: NavigationDrawerItem("Главная", Icons.Filled.Home,Icons.Filled.Home, Routs.HomeScreen.route)
++    object Main: NavigationDrawerItem("Главная", Icons.Filled.Home,Icons.Filled.Home, Routs.Home.route)
+     object Info: NavigationDrawerItem("Инфо", Icons.Filled.Info, Icons.Filled.Info, Routs.LoginScreen.route)
+     object Settings: NavigationDrawerItem("Настройки", Icons.Filled.Settings, Icons.Filled.Settings, Routs.LoginScreen.route)
+ }
+Index: app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerProfile.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerProfile.kt b/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerProfile.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerProfile.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/navigation_drawer_profile/NavigationDrawerProfile.kt	(date 1725133790210)
+@@ -31,13 +31,12 @@
+ import ru.startandroid.develop.autentification.Screen1
+ import ru.startandroid.develop.autentification.Screen2
+ import ru.startandroid.develop.autentification.Screen3
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
+ 
+ @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+ @OptIn(ExperimentalMaterial3Api::class)
+ @Composable
+-fun NavigationDrawerProfile(
+-    navController: NavController
+-) {
++fun NavigationDrawerProfile(navController: NavController) {
+     val navBottomController = rememberNavController()
+     val listItems = listOf(
+         NavigationDrawerItem.Main,
+Index: app/src/main/java/ru/startandroid/develop/autentification/mainscreen/MainScreen.kt
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/MainScreen.kt b/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/MainScreen.kt
+deleted file mode 100644
+--- a/app/src/main/java/ru/startandroid/develop/autentification/mainscreen/MainScreen.kt	
++++ /dev/null	
+@@ -1,35 +0,0 @@
+-package ru.startandroid.develop.autentification.mainscreen
+-
+-import android.annotation.SuppressLint
+-import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.material3.ExperimentalMaterial3Api
+-import androidx.compose.material3.Surface
+-import androidx.compose.runtime.Composable
+-import androidx.compose.ui.Modifier
+-import androidx.navigation.compose.NavHost
+-import androidx.navigation.compose.composable
+-import androidx.navigation.compose.rememberNavController
+-import ru.startandroid.develop.autentification.Routs
+-import ru.startandroid.develop.autentification.login.LoginScreen
+-import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
+-
+-@OptIn(ExperimentalMaterial3Api::class)
+-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+-@Composable
+-fun MainScreen() {
+-    Surface(
+-        modifier = Modifier.fillMaxSize()
+-    ) {
+-        val navController = rememberNavController()
+-        NavHost(navController = navController, startDestination = Routs.HomeScreen.route) {
+-            composable(Routs.HomeScreen.route){
+-                NavigationDrawerProfile(
+-                    navController = navController
+-                )
+-            }
+-            composable("login_screen"){
+-                LoginScreen()
+-            }
+-        }
+-    }
+-}
+Index: app/src/main/java/ru/startandroid/develop/autentification/Screen1.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/Screen1.kt b/app/src/main/java/ru/startandroid/develop/autentification/Screen1.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/Screen1.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/Screen1.kt	(date 1725133790203)
+@@ -1,20 +1,41 @@
+ package ru.startandroid.develop.autentification
+ 
+-import androidx.compose.foundation.background
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.foundation.layout.wrapContentHeight
+ import androidx.compose.material3.Text
++import androidx.compose.material3.TextButton
+ import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.runtime.livedata.observeAsState
++import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
+-import androidx.compose.ui.graphics.Color
+-import androidx.compose.ui.text.style.TextAlign
+-import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
++import androidx.compose.ui.unit.sp
++import androidx.navigation.NavController
++import ru.startandroid.develop.autentification.authentication.AuthState
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
+ 
+ @Composable
+ fun Screen1() {
+-    Text(
+-        modifier = Modifier.fillMaxSize().wrapContentHeight(),
+-        text = "Screen1",
+-        textAlign = TextAlign.Center,
+-        )
+-}
+\ No newline at end of file
++//    val authState = authViewModel.authState.observeAsState()
++//
++//    LaunchedEffect(authState.value) {
++//        when(authState.value){
++//            is AuthState.Unauthenticated -> navController.navigate("login_screen")
++//            else -> Unit
++//        }
++//    }
++    Column(
++        modifier = Modifier.fillMaxSize(),
++        verticalArrangement = Arrangement.Center,
++        horizontalAlignment = Alignment.CenterHorizontally
++    ) {
++        Text(text = "Home Page", fontSize = 32.sp)
++
++        TextButton(onClick = {
++//            authViewModel.signout()
++        }) {
++            Text(text = "Sign out")
++        }
++    }
++}
+Index: app/src/main/java/ru/startandroid/develop/autentification/Screen2.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/Screen2.kt b/app/src/main/java/ru/startandroid/develop/autentification/Screen2.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/Screen2.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/Screen2.kt	(date 1725133790200)
+@@ -1,16 +1,30 @@
+ package ru.startandroid.develop.autentification
+ 
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.foundation.layout.wrapContentHeight
+ import androidx.compose.material3.Text
++import androidx.compose.material3.TextButton
+ import androidx.compose.runtime.Composable
++import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.text.style.TextAlign
++import androidx.compose.ui.unit.sp
+ 
+ @Composable
+ fun Screen2() {
+-    Text(
+-        modifier = Modifier.fillMaxSize().wrapContentHeight(),
+-        text = "Screen2",
+-        textAlign = TextAlign.Center)
++    Column(
++        modifier = Modifier.fillMaxSize(),
++        verticalArrangement = Arrangement.Center,
++        horizontalAlignment = Alignment.CenterHorizontally
++    ) {
++        Text(text = "Second Page", fontSize = 32.sp)
++
++        TextButton(onClick = {
++//            authViewModel.signout()
++        }) {
++            Text(text = "Sign out")
++        }
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthState.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthState.kt b/app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthState.kt
+new file mode 100644
+--- /dev/null	(date 1725133790195)
++++ b/app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthState.kt	(date 1725133790195)
+@@ -0,0 +1,8 @@
++package ru.startandroid.develop.autentification.authentication
++
++sealed class AuthState {
++    object Authenticated : AuthState()
++    object Unauthenticated : AuthState()
++    object Loading : AuthState()
++    data class Error(val message: String): AuthState()
++}
+\ No newline at end of file
+Index: app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthViewModel.kt b/app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthViewModel.kt
+new file mode 100644
+--- /dev/null	(date 1725133790190)
++++ b/app/src/main/java/ru/startandroid/develop/autentification/authentication/AuthViewModel.kt	(date 1725133790190)
+@@ -0,0 +1,64 @@
++package ru.startandroid.develop.autentification.authentication
++
++import androidx.lifecycle.LiveData
++import androidx.lifecycle.MutableLiveData
++import androidx.lifecycle.ViewModel
++import com.google.firebase.auth.FirebaseAuth
++
++class AuthViewModel : ViewModel()  {
++    private val auth = FirebaseAuth.getInstance()
++
++    private val _authState = MutableLiveData<AuthState>()
++    val authState: LiveData<AuthState> = _authState
++
++    init {
++        checkAuthStatus()
++    }
++
++    fun checkAuthStatus(){
++        if(auth.currentUser==null){
++            _authState.value = AuthState.Unauthenticated
++        }else{
++            _authState.value = AuthState.Authenticated
++        }
++    }
++
++    fun login(emailState : String,passwordState : String){
++
++        if(emailState.isEmpty() || passwordState.isEmpty()){
++            _authState.value = AuthState.Error("Email or password can't be empty")
++            return
++        }
++        _authState.value = AuthState.Loading
++        auth.signInWithEmailAndPassword(emailState,passwordState)
++            .addOnCompleteListener{task->
++                if (task.isSuccessful){
++                    _authState.value = AuthState.Authenticated
++                }else{
++                    _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
++                }
++            }
++    }
++
++    fun signup(email : String,password : String){
++
++        if(email.isEmpty() || password.isEmpty()){
++            _authState.value = AuthState.Error("Email or password can't be empty")
++            return
++        }
++        _authState.value = AuthState.Loading
++        auth.createUserWithEmailAndPassword(email,password)
++            .addOnCompleteListener{task->
++                if (task.isSuccessful){
++                    _authState.value = AuthState.Authenticated
++                }else{
++                    _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
++                }
++            }
++    }
++
++    fun signout(){
++        auth.signOut()
++        _authState.value = AuthState.Unauthenticated
++    }
++}
+Index: app/src/main/java/ru/startandroid/develop/autentification/AppNavigation.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/AppNavigation.kt b/app/src/main/java/ru/startandroid/develop/autentification/AppNavigation.kt
+new file mode 100644
+--- /dev/null	(date 1725133790181)
++++ b/app/src/main/java/ru/startandroid/develop/autentification/AppNavigation.kt	(date 1725133790181)
+@@ -0,0 +1,28 @@
++package ru.startandroid.develop.autentification
++
++import androidx.compose.runtime.Composable
++import androidx.navigation.compose.NavHost
++import androidx.navigation.compose.composable
++import androidx.navigation.compose.rememberNavController
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
++import ru.startandroid.develop.autentification.login.LoginScreen
++import ru.startandroid.develop.autentification.login.SignUpScreen
++import ru.startandroid.develop.autentification.mainscreen.HomeScreen
++import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
++
++@Composable
++fun AppNavigation(authViewModel: AuthViewModel){
++    val navController = rememberNavController()
++
++    NavHost(navController = navController, startDestination = "login_screen") {
++        composable("login_screen"){
++            LoginScreen(navController,authViewModel)
++        }
++        composable("signup_screen"){
++            SignUpScreen(navController, authViewModel)
++        }
++        composable("home_screen"){
++            HomeScreen(navController, authViewModel)
++        }
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/ru/startandroid/develop/autentification/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/startandroid/develop/autentification/MainActivity.kt b/app/src/main/java/ru/startandroid/develop/autentification/MainActivity.kt
+--- a/app/src/main/java/ru/startandroid/develop/autentification/MainActivity.kt	
++++ b/app/src/main/java/ru/startandroid/develop/autentification/MainActivity.kt	(date 1725133790197)
+@@ -4,16 +4,13 @@
+ import androidx.activity.ComponentActivity
+ import androidx.activity.compose.setContent
+ import androidx.activity.viewModels
+-import ru.startandroid.develop.autentification.auth.AppNavigation
+-import ru.startandroid.develop.autentification.auth.AuthViewModel
++import ru.startandroid.develop.autentification.authentication.AuthViewModel
+ 
+ class MainActivity : ComponentActivity() {
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         val authViewModel : AuthViewModel by viewModels()
+         setContent {
+-//            MainScreen()
+-//            LoginScreen()
+             AppNavigation(authViewModel = authViewModel)
+         }
+     }
