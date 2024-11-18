@@ -16,6 +16,7 @@ import ru.startandroid.develop.autentification.authentication.AuthState
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
 import ru.startandroid.develop.autentification.login.LoginScreen
 import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
+import ru.startandroid.develop.autentification.petsscreen.profilepetscreen.ProfilePetScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -35,12 +36,13 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel) {
         val navMainController = rememberNavController()
         NavHost(navController = navMainController, startDestination = Routs.HomeScreen.route) {
             composable(Routs.HomeScreen.route){
-                NavigationDrawerProfile(
-                    navController = navMainController, authViewModel
-                )
+                NavigationDrawerProfile(navMainController, authViewModel)
             }
             composable(Routs.LoginScreen.route){
-                LoginScreen(navController = navController, authViewModel = authViewModel)
+                LoginScreen(navController, authViewModel)
+            }
+            composable(Routs.ProfilePetScreen.route){
+                ProfilePetScreen()
             }
         }
     }

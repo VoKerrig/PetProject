@@ -33,6 +33,7 @@ import ru.startandroid.develop.autentification.ProfileScreen
 import ru.startandroid.develop.autentification.mainscreen.bottom_navigation.NavigationBottomBar
 import ru.startandroid.develop.autentification.Routs
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
+import ru.startandroid.develop.autentification.petsscreen.profilepetscreen.ProfilePetScreen
 import ru.startandroid.develop.autentification.ui.theme.BarColor
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -110,7 +111,7 @@ fun NavigationDrawerProfile(navController: NavController, authViewModel: AuthVie
 
             NavHost(navController = navBottomController, startDestination = Routs.HomeScreen.route) {
                 composable(Routs.HomeScreen.route) { HomeScreen(navController, authViewModel) }
-                composable(Routs.PetsScreen.route) { PetsScreen() }
+                composable(Routs.PetsScreen.route) { PetsScreen(navController) }
                 composable(Routs.ProfileScreen.route) { ProfileScreen() }
             }
         }

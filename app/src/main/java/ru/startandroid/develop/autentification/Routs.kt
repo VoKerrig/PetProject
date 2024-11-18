@@ -7,6 +7,7 @@ sealed class Routs (val route: String){
     object HomeScreen: Routs("home_screen")
     object PetsScreen: Routs("pets_screen")
     object ProfileScreen: Routs("profile_screen")
+    object ProfilePetScreen: Routs("profile_pet_screen")
 
 
 }

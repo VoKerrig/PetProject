@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -64,9 +66,9 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
                 .fillMaxWidth()
                 .fillMaxHeight(0.6f)
                 .background(color = BarColor)
-                .padding(start = 40.dp, end = 40.dp),
+                .padding(start = 40.dp, end = 40.dp, top = 200.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
+            verticalArrangement = Arrangement.Center
         ) {
             EmailTextField(
                 text = emailState,
@@ -95,17 +97,19 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
                 Text(text = "Нет аккаунта? Зарегистрируйтесь")
             }
         }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = BarColor),
-            contentAlignment = Alignment.Center
+                .background(BarColor),
+            contentAlignment = Alignment.BottomCenter
         ) {
             Image(
+                modifier = Modifier.size(350.dp),
                 painter = painterResource(id = R.drawable.auth_pic),
                 contentDescription = "background",
-                contentScale = ContentScale.Crop
             )
         }
+
     }
 }
