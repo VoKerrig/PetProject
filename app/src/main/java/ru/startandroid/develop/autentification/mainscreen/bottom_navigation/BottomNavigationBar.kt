@@ -29,7 +29,6 @@ fun NavigationBottomBar(
         mutableStateOf(0)
     }
 
-
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutine = rememberCoroutineScope()
 
@@ -46,8 +45,7 @@ fun NavigationBottomBar(
                     coroutine.launch {
                         drawerState.close()
                     }
-
-                    },
+                          },
                 label = {
                         Text(text = item.title)
                 },

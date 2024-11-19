@@ -1,6 +1,5 @@
 package ru.startandroid.develop.autentification.petsscreen.profilepetscreen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,13 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import ru.startandroid.develop.autentification.Routs
+import ru.startandroid.develop.autentification.roomdb.MainViewModel
 import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
 @Composable
-fun ProfilePetScreen() {
-    var nameState by remember {
-        mutableStateOf("")
-    }
+fun ProfilePetScreen(
+    navController: NavController,
+    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
+) {
     var breedState by remember {
         mutableStateOf("")
     }
@@ -49,16 +51,17 @@ fun ProfilePetScreen() {
         Spacer(modifier = Modifier.padding(top = 50.dp))
 
         ProfilePetTextField(
-            text = nameState,
-            label = "Кличка"
-        ) {
-            nameState = it
-        }
+            value = mainViewModel.newText.value,
+            label = "Кличка",
+            onValueChange = {
+                mainViewModel.newText.value = it
+            }
+        )
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
         ProfilePetTextField(
-            text = breedState,
+            value = breedState,
             label = "Порода"
         ) {
             breedState = it
@@ -67,7 +70,7 @@ fun ProfilePetScreen() {
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
         ProfilePetTextField(
-            text = textState,
+            value = textState,
             label = "Пол"
         ) {
             textState = it
@@ -82,7 +85,7 @@ fun ProfilePetScreen() {
             ageState = it
         }
 
-        Spacer(modifier = Modifier.padding(top = 50.dp))
+        Spacer(modifier = Modifier.padding(top = 10.dp))
 
         Button(
             modifier = Modifier
@@ -90,7 +93,23 @@ fun ProfilePetScreen() {
                 .padding(start = 50.dp, end = 50.dp),
             onClick = {}
         ) {
-            Text(text = "Добавить")
+            Text(text = "Добавить фото")
+        }
+
+        Spacer(modifier = Modifier.padding(top = 50.dp))
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 50.dp, end = 50.dp),
+            onClick = {
+                mainViewModel.insertItem()
+                navController.navigate(Routs.PetsScreen.route){
+                    popUpTo(Routs.HomeScreen.route)
+                }
+            }
+        ) {
+            Text(text = "Готово")
         }
     }
 }

@@ -8,6 +8,8 @@ import ru.startandroid.develop.autentification.authentication.AuthViewModel
 import ru.startandroid.develop.autentification.login.LoginScreen
 import ru.startandroid.develop.autentification.login.SignUpScreen
 import ru.startandroid.develop.autentification.mainscreen.MainScreen
+import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
+import ru.startandroid.develop.autentification.petsscreen.PetsScreen
 
 @Composable
 fun AppNavigation(authViewModel: AuthViewModel){
@@ -24,4 +26,5 @@ fun AppNavigation(authViewModel: AuthViewModel){
             MainScreen(navController, authViewModel)
         }
     }
+
 }

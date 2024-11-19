@@ -23,8 +23,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +41,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.startandroid.develop.autentification.R
 import ru.startandroid.develop.autentification.Routs
+import ru.startandroid.develop.autentification.authentication.AuthState
+import ru.startandroid.develop.autentification.authentication.AuthViewModel
 import ru.startandroid.develop.autentification.petsscreen.profilepetscreen.ProfilePetScreen
 import ru.startandroid.develop.autentification.roomdb.MainViewModel
 
@@ -49,6 +53,7 @@ fun PetsScreen(
     mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
 ) {
     val itemsList = mainViewModel.itemsList.collectAsState(initial = emptyList())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,30 +79,6 @@ fun PetsScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(0.7f)
         ) {
-            Row(
-                modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TextField(
-                    value = mainViewModel.newText.value,
-                    onValueChange = {
-                        mainViewModel.newText.value = it
-                },
-                    label = {
-                        Text(text = "Name...")
-                    },
-                    modifier = Modifier.weight(1f),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White
-                    )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(5.dp))
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,7 +96,6 @@ fun PetsScreen(
                     )
                 }
             }
-
         }
 
         Button(
@@ -123,11 +103,8 @@ fun PetsScreen(
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp, top = 10.dp),
             onClick = {
-//                mainViewModel.insertItem()
                 navController.navigate(Routs.ProfilePetScreen.route)
-
             }
-
         ) {
             Text(text = "Добавить питомца")
         }

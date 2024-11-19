@@ -13,16 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import ru.startandroid.develop.autentification.roomdb.MainViewModel
 import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
 @Composable
 fun ProfilePetTextField(
-    text: String,
+    value: String,
     label: String,
     onValueChange: (String) -> Unit
 ) {
     TextField(
-        value = text,
+//        value = text,
+        value = value,
         onValueChange = {
             onValueChange(it)
         },
