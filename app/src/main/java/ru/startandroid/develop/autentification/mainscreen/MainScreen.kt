@@ -11,14 +11,16 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import ru.startandroid.develop.autentification.ProfileScreen
 import ru.startandroid.develop.autentification.Routs
 import ru.startandroid.develop.autentification.authentication.AuthState
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
 import ru.startandroid.develop.autentification.login.LoginScreen
+import ru.startandroid.develop.autentification.login.data.LoginScreenObject
+import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
 import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
 import ru.startandroid.develop.autentification.petsscreen.PetsScreen
-import ru.startandroid.develop.autentification.petsscreen.profilepetscreen.ProfilePetScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -27,7 +29,7 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel) {
 
     LaunchedEffect(authState.value) {
         when(authState.value){
-            is AuthState.Unauthenticated -> navController.navigate(Routs.LoginScreen.route)
+            is AuthState.Unauthenticated -> navController.navigate(LoginScreenObject)
             else -> Unit
         }
     }
@@ -40,13 +42,18 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel) {
             composable(Routs.HomeScreen.route){
                 NavigationDrawerProfile(authViewModel)
             }
-            composable(Routs.LoginScreen.route){
-                LoginScreen(navController, authViewModel)
+            composable<LoginScreenObject> {
+                LoginScreen(navController, authViewModel){
+                        navData -> navController.navigate(navData)
+                }
             }
             composable(Routs.PetsScreen.route){
                 PetsScreen(navController)
             }
-            composable(Routs.MainScreen.route){
+
+            composable<MainScreenDataObject>{
+//                navEntry ->
+//                val navData = navEntry.toRoute<MainScreenDataObject>()
                 MainScreen(navController, authViewModel)
             }
             composable(Routs.ProfileScreen.route){

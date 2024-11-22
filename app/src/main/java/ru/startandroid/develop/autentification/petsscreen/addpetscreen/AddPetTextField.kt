@@ -1,4 +1,4 @@
-package ru.startandroid.develop.autentification.petsscreen.profilepetscreen
+package ru.startandroid.develop.autentification.petsscreen.addpetscreen
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,17 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import ru.startandroid.develop.autentification.roomdb.MainViewModel
 import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
 @Composable
-fun ProfilePetTextField(
+fun AddPetTextField(
     value: String,
     label: String,
     onValueChange: (String) -> Unit
 ) {
     TextField(
-//        value = text,
         value = value,
         onValueChange = {
             onValueChange(it)
@@ -48,7 +46,7 @@ fun ProfilePetTextField(
 }
 
 @Composable
-fun ProfilePetTextFieldAge(
+fun AddPetTextFieldAge(
     text: String,
     label: String,
     onValueChange: (String) -> Unit

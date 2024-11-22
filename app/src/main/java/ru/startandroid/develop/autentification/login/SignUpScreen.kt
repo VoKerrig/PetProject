@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,14 +30,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import ru.startandroid.develop.autentification.R
 import ru.startandroid.develop.autentification.Routs
 import ru.startandroid.develop.autentification.authentication.AuthState
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
+import ru.startandroid.develop.autentification.login.data.LoginScreenObject
+import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
 import ru.startandroid.develop.autentification.ui.theme.BarColor
 
 @Composable
-fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun SignUpScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    onNavigateToMainScreen: (MainScreenDataObject) -> Unit
+) {
+
+    val auth = remember {
+        Firebase.auth
+    }
     var emailState by remember {
         mutableStateOf("")
     }
@@ -49,7 +63,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
 
     LaunchedEffect(authState.value) {
         when(authState.value) {
-            is AuthState.Authenticated -> navController.navigate(Routs.MainScreen.route)
+            is AuthState.Authenticated -> navController.navigate(MainScreenDataObject)
             is AuthState.Error -> Toast.makeText(context,
                 (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
             else -> Unit
@@ -57,15 +71,14 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.6f)
-                .background(color = BarColor)
+                .background(BarColor)
                 .padding(start = 40.dp, end = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
@@ -85,28 +98,35 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
             }
             Spacer(modifier = Modifier.height(10.dp))
             Button(onClick = {
-                authViewModel.signup(emailState, passwordState)
+                authViewModel.signUp(
+                    emailState,
+                    passwordState,
+//                    onSignUpSuccess = { navData ->
+//                        onNavigateToMainScreen(navData)
+//                    }
+                )
             }) {
                 Text(text = "Register")
             }
             Spacer(modifier = Modifier.height(10.dp))
 
             TextButton(onClick = {
-                navController.navigate(Routs.LoginScreen.route)
+                navController.navigate(LoginScreenObject)
             }) {
                 Text(text = "Уже регистрировались? Войти")
             }
         }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = BarColor),
+                .background(BarColor),
             contentAlignment = Alignment.Center
         ) {
             Image(
+                modifier = Modifier.size(350.dp),
                 painter = painterResource(id = R.drawable.auth_pic),
                 contentDescription = "background",
-                contentScale = ContentScale.Crop
             )
         }
     }

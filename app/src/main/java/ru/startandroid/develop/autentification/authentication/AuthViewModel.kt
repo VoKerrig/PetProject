@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.serialization.Serializable
 
+//@Serializable
 class AuthViewModel : ViewModel()  {
     private val auth = FirebaseAuth.getInstance()
-
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
@@ -23,16 +24,25 @@ class AuthViewModel : ViewModel()  {
         }
     }
 
-    fun login(emailState : String,passwordState : String){
-
-        if(emailState.isEmpty() || passwordState.isEmpty()){
+    fun signIn(
+        email : String,
+        password : String,
+//        onSignInSuccess: (MainScreenDataObject) -> Unit
+    ){
+        if(email.isEmpty() || password.isEmpty()){
             _authState.value = AuthState.Error("Email or password can't be empty")
             return
         }
         _authState.value = AuthState.Loading
-        auth.signInWithEmailAndPassword(emailState,passwordState)
-            .addOnCompleteListener{task->
+        auth.signInWithEmailAndPassword(email,password)
+            .addOnCompleteListener{ task->
                 if (task.isSuccessful){
+//                    onSignInSuccess(
+//                        MainScreenDataObject(
+//                            task.result.user?.uid!!,
+//                            task.result.user?.email!!
+//                        )
+//                    )
                     _authState.value = AuthState.Authenticated
                 }else{
                     _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
@@ -40,16 +50,25 @@ class AuthViewModel : ViewModel()  {
             }
     }
 
-    fun signup(email : String,password : String){
-
+    fun signUp(
+        email : String,
+        password : String,
+//        onSignUpSuccess: (MainScreenDataObject) -> Unit
+    ){
         if(email.isEmpty() || password.isEmpty()){
             _authState.value = AuthState.Error("Email or password can't be empty")
             return
         }
         _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(email,password)
-            .addOnCompleteListener{task->
+            .addOnCompleteListener{ task->
                 if (task.isSuccessful){
+//                    onSignUpSuccess(
+//                        MainScreenDataObject(
+//                            task.result.user?.uid!!,
+//                            task.result.user?.email!!
+//                        )
+//                    )
                     _authState.value = AuthState.Authenticated
                 }else{
                     _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")

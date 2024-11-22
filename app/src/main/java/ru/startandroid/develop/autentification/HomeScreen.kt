@@ -14,17 +14,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.startandroid.develop.autentification.authentication.AuthState
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
+import ru.startandroid.develop.autentification.login.data.LoginScreenObject
 
 @Composable
 fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
 
-    LaunchedEffect(authState.value) {
-        when(authState.value){
-            is AuthState.Unauthenticated -> navController.navigate("login_screen")
-            else -> Unit
-        }
-    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

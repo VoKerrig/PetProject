@@ -3,17 +3,19 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.gms)
     alias(libs.plugins.ksp)
+
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.plugin.serialization)
 }
 
 android {
     namespace = "ru.startandroid.develop.autentification"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ru.startandroid.develop.autentification"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -53,6 +55,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
 
