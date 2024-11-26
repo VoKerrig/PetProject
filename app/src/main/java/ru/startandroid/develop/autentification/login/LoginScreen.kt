@@ -47,9 +47,6 @@ fun LoginScreen(
     onNavigateToMainScreen: (MainScreenDataObject) -> Unit
 ) {
 
-//    val auth = remember {
-//        Firebase.auth
-//    }
     var emailState by remember {
         mutableStateOf("")
     }
@@ -62,7 +59,7 @@ fun LoginScreen(
 
     LaunchedEffect(authState.value) {
         when(authState.value){
-            is AuthState.Authenticated -> navController.navigate(MainScreenDataObject)
+//            is AuthState.Authenticated -> navController.navigate(MainScreenDataObject)
             is AuthState.Error -> Toast.makeText(context,
                 (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
             else -> Unit
@@ -102,9 +99,9 @@ fun LoginScreen(
                 authViewModel.signIn(
                     emailState,
                     passwordState,
-//                    onSignInSuccess = { navData ->
-//                        onNavigateToMainScreen(navData)
-//                    }
+                    onSignInSuccess = { navData ->
+                        onNavigateToMainScreen(navData)
+                    }
                 )
             }) {
                 Text(text = "Login")

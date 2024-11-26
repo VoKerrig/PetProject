@@ -1,6 +1,6 @@
 [versions]
 agp = "8.4.2"
-kotlin = "2.0.20"
+kotlin = "2.0.20-Beta2"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -18,7 +18,7 @@ runtimeLivedata = "1.7.5"
 material3Android = "1.3.1"
 roomVersion = "2.6.1"
 kspVersion = "2.0.20-1.0.24"
-serializationVersion = "2.0.20"
+serializationVersion = "2.0.20-Beta2"
 serializationKotlin = "1.7.1"
 
 [libraries]
