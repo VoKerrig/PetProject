@@ -43,7 +43,10 @@ import ru.startandroid.develop.autentification.ui.theme.BarColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationDrawerProfile(authViewModel: AuthViewModel) {
+fun NavigationDrawerProfile(
+    authViewModel: AuthViewModel,
+    navData: MainScreenDataObject
+) {
     val navController = rememberNavController()
     val listItems = listOf(
         NavigationDrawerItem.Main,
@@ -117,7 +120,7 @@ fun NavigationDrawerProfile(authViewModel: AuthViewModel) {
                     HomeScreen(navController, authViewModel)
                 }
                 composable(Routs.PetsScreen.route) {
-                    PetsScreen(navController)
+                    PetsScreen(navController, navData)
                 }
                 composable(Routs.ProfileScreen.route) {
                     ProfileScreen()
@@ -126,17 +129,12 @@ fun NavigationDrawerProfile(authViewModel: AuthViewModel) {
                     AddPetScreen(navController)
                 }
                 composable<LoginScreenObject> {
-                    LoginScreen(navController, authViewModel){
-                            navData -> navController.navigate(navData)
+                    LoginScreen(navController, authViewModel) { navData ->
+                        navController.navigate(navData)
                     }
                 }
-//                composable(Routs.MainScreen.route){
-//                    MainScreen(navController, authViewModel)
-//                }
                 composable<MainScreenDataObject>{
-//                    navEntry ->
-//                    val navData = navEntry.toRoute<MainScreenDataObject>()
-                    MainScreen(navController, authViewModel)
+                    MainScreen(navController, authViewModel, navData = MainScreenDataObject())
                 }
             }
         }

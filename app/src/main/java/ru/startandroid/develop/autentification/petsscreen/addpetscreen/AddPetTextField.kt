@@ -38,7 +38,7 @@ fun AddPetTextField(
             .padding(start = 50.dp, end = 50.dp)
             .border(1.dp, CorgiColor, RoundedCornerShape(20.dp)),
         label = {
-            Text(text = label, color = Color.Gray)
+            Text(text = label)
         },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
@@ -47,12 +47,12 @@ fun AddPetTextField(
 
 @Composable
 fun AddPetTextFieldAge(
-    text: String,
+    value: String,
     label: String,
     onValueChange: (String) -> Unit
 ) {
     TextField(
-        value = text,
+        value = value,
         onValueChange = {
             onValueChange(it)
         },
@@ -68,7 +68,7 @@ fun AddPetTextFieldAge(
             .padding(start = 50.dp, end = 50.dp)
             .border(1.dp, CorgiColor, RoundedCornerShape(20.dp)),
         label = {
-            Text(text = label, color = Color.Gray)
+            Text(text = label)
         },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)

@@ -61,9 +61,13 @@ dependencies {
     implementation(libs.firebase.firestore)
 
     implementation(libs.androidx.room)
+    implementation(libs.firebase.storage)
     annotationProcessor(libs.androidx.room.annotation.processor)
     ksp(libs.androidx.room.annotation.processor)
     implementation(libs.androidx.room.room.ktx)
+
+    implementation(libs.coil.kt)
+    implementation(libs.coil.network.okhttp)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -24,12 +24,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ru.startandroid.develop.autentification.R
 import ru.startandroid.develop.autentification.Routs
+import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
 import ru.startandroid.develop.autentification.roomdb.MainViewModel
 
 
 @Composable
 fun PetsScreen(
     navController: NavController,
+    navData: MainScreenDataObject,
     mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
 ) {
     val itemsList = mainViewModel.itemsList.collectAsState(initial = emptyList())

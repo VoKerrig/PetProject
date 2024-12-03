@@ -28,7 +28,8 @@ class MainViewModel(val database: MainDb) : ViewModel() {
         database.dao.deleteItem(item)
     }
 
-    companion object{
+
+    companion object {
         val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory{
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(
@@ -39,5 +40,4 @@ class MainViewModel(val database: MainDb) : ViewModel() {
             }
         }
     }
-
 }

@@ -24,7 +24,11 @@ import ru.startandroid.develop.autentification.petsscreen.PetsScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun MainScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    navData: MainScreenDataObject
+) {
     val authState = authViewModel.authState.observeAsState()
 
     LaunchedEffect(authState.value) {
@@ -40,21 +44,12 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel) {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = Routs.HomeScreen.route) {
             composable(Routs.HomeScreen.route){
-                NavigationDrawerProfile(authViewModel)
+                NavigationDrawerProfile(authViewModel, navData)
             }
             composable<LoginScreenObject> {
                 LoginScreen(navController, authViewModel){
                         navData -> navController.navigate(navData)
                 }
-            }
-            composable(Routs.PetsScreen.route){
-                PetsScreen(navController)
-            }
-
-            composable<MainScreenDataObject>{
-//                navEntry ->
-//                val navData = navEntry.toRoute<MainScreenDataObject>()
-                MainScreen(navController, authViewModel)
             }
             composable(Routs.ProfileScreen.route){
                 ProfileScreen()

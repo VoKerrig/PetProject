@@ -1,5 +1,9 @@
 package ru.startandroid.develop.autentification.petsscreen.addpetscreen
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,11 +18,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil3.compose.rememberAsyncImagePainter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+import ru.startandroid.develop.autentification.R
 import ru.startandroid.develop.autentification.Routs
 import ru.startandroid.develop.autentification.roomdb.MainViewModel
 import ru.startandroid.develop.autentification.ui.theme.CorgiColor
@@ -26,20 +40,41 @@ import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 @Composable
 fun AddPetScreen(
     navController: NavController,
-//    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
+    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
 ) {
-    var nameState by remember {
+    var selectedPol = "Не указано"
+    val name = remember {
         mutableStateOf("")
     }
-    var breedState by remember {
+    val breed = remember {
         mutableStateOf("")
     }
-    var textState by remember {
+    val age = remember {
         mutableStateOf("")
     }
-    var ageState by remember {
-        mutableStateOf("")
+    val selectedImageUri = remember {
+        mutableStateOf<Uri?>(null)
     }
+    val firestore = remember {
+        Firebase.firestore
+    }
+    val storage = remember {
+        Firebase.storage
+    }
+
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        uri ->
+        selectedImageUri.value = uri
+    }
+
+    Image(painter = rememberAsyncImagePainter(
+        model = selectedImageUri.value),
+        contentDescription = "",
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
+    )
 
     Column(
         modifier = Modifier
@@ -63,37 +98,34 @@ fun AddPetScreen(
 //        )
 
         AddPetTextField(
-            value = nameState,
+            value = name.value,
             label = "Кличка"
         ) {
-            nameState = it
+            name.value = it
         }
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
         AddPetTextField(
-            value = breedState,
+            value = breed.value,
             label = "Порода"
         ) {
-            breedState = it
-        }
-
-        Spacer(modifier = Modifier.padding(top = 10.dp))
-
-        AddPetTextField(
-            value = textState,
-            label = "Пол"
-        ) {
-            textState = it
+            breed.value = it
         }
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
         AddPetTextFieldAge(
-            text = ageState,
+            value = age.value,
             label = "Возраст"
         ) {
-            ageState = it
+            age.value = it
+        }
+
+        Spacer(modifier = Modifier.padding(top = 10.dp))
+
+        RoundedCornerDropDownMenu { selectedItem ->
+            selectedPol = selectedItem
         }
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
@@ -102,7 +134,9 @@ fun AddPetScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 50.dp, end = 50.dp),
-            onClick = {}
+            onClick = {
+                imageLauncher.launch("image/*")
+            }
         ) {
             Text(text = "Добавить фото")
         }
@@ -114,24 +148,75 @@ fun AddPetScreen(
                 .fillMaxWidth()
                 .padding(start = 50.dp, end = 50.dp),
             onClick = {
-                navController.popBackStack()
+                savePetImage(
+                    selectedImageUri.value!!,
+                    storage,
+                    firestore,
+                    Pet(
+                        name = name.value,
+                        breed = breed.value,
+                        age = age.value,
+                        pol = selectedPol
+                    ),
+                    onSaved = {
+                        navController.popBackStack()
+                    },
+                    onError = {}
+                )
             }
         ) {
             Text(text = "Готово")
         }
-
-        //        Button(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(start = 50.dp, end = 50.dp),
-//            onClick = {
-//                mainViewModel.insertItem()
-//                navController.navigate(Routs.PetsScreen.route){
-//                    popUpTo(Routs.HomeScreen.route)
-//                }
-//            }
-//        ) {
-//            Text(text = "Готово")
-//        }
     }
+}
+
+private fun savePetImage(
+    uri: Uri,
+    storage: FirebaseStorage,
+    firestore: FirebaseFirestore,
+    pet: Pet,
+    onSaved: () -> Unit,
+    onError: () -> Unit
+) {
+    val timeStamp = System.currentTimeMillis()
+    val storageRef = storage.reference
+        .child("pet_images")
+        .child("image_$timeStamp.jpg")
+    val uploadTask = storageRef.putFile(uri)
+    uploadTask.addOnSuccessListener {
+        storageRef.downloadUrl.addOnSuccessListener { url ->
+            savePetToFirestore(
+                firestore,
+                url.toString(),
+                pet,
+                onSaved = {
+                    onSaved()
+                },
+                onError = {
+                    onError()
+                }
+            )
+        }
+    }
+}
+
+private fun savePetToFirestore(
+    firestore: FirebaseFirestore,
+    url: String,
+    pet: Pet,
+    onSaved: () -> Unit,
+    onError: () -> Unit
+) {
+    val db = firestore.collection("pets")
+    val key = db.document().id
+    db.document(key)
+        .set(
+            pet.copy(key = key, imageUrl = url)
+        )
+        .addOnSuccessListener {
+            onSaved()
+        }
+        .addOnFailureListener{
+            onError()
+        }
 }

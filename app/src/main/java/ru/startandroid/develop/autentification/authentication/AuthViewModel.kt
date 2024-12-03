@@ -4,6 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
 
 class AuthViewModel : ViewModel()  {
@@ -37,7 +44,8 @@ class AuthViewModel : ViewModel()  {
             .addOnCompleteListener{ task->
                 if (task.isSuccessful){
                     onSignInSuccess(
-                        MainScreenDataObject(
+                        MainScreenDataObject
+                            (
                             task.result.user?.uid!!,
                             task.result.user?.email!!
                         )
@@ -63,7 +71,8 @@ class AuthViewModel : ViewModel()  {
             .addOnCompleteListener{ task->
                 if (task.isSuccessful){
                     onSignUpSuccess(
-                        MainScreenDataObject(
+                        MainScreenDataObject
+                            (
                             task.result.user?.uid!!,
                             task.result.user?.email!!
                         )

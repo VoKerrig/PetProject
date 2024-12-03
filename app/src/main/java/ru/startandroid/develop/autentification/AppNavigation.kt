@@ -8,12 +8,12 @@ import androidx.navigation.toRoute
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
 import ru.startandroid.develop.autentification.login.LoginScreen
 import ru.startandroid.develop.autentification.login.SignUpScreen
+import ru.startandroid.develop.autentification.login.data.AddPetScreenObject
 import ru.startandroid.develop.autentification.login.data.LoginScreenObject
 import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
 import ru.startandroid.develop.autentification.login.data.SignUpScreenObject
 import ru.startandroid.develop.autentification.mainscreen.MainScreen
-import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerProfile
-import ru.startandroid.develop.autentification.petsscreen.PetsScreen
+import ru.startandroid.develop.autentification.petsscreen.addpetscreen.AddPetScreen
 
 @Composable
 fun AppNavigation(authViewModel: AuthViewModel){
@@ -21,18 +21,21 @@ fun AppNavigation(authViewModel: AuthViewModel){
 
     NavHost(navController = navController, startDestination = LoginScreenObject ) {
         composable<LoginScreenObject> {
-            LoginScreen(navController, authViewModel){
-                navData -> navController.navigate(navData)
+            LoginScreen(navController, authViewModel) { navData ->
+                navController.navigate(navData)
             }
         }
-        composable<MainScreenDataObject>{ navEntry ->
+        composable<MainScreenDataObject> { navEntry ->
             val navData = navEntry.toRoute<MainScreenDataObject>()
-            MainScreen(navController, authViewModel)
+            MainScreen(navController, authViewModel, navData)
         }
         composable<SignUpScreenObject>{
-            SignUpScreen(navController, authViewModel){
-                    navData -> navController.navigate(navData)
+            SignUpScreen(navController, authViewModel) { navData ->
+                navController.navigate(navData)
             }
+        }
+        composable<AddPetScreenObject>{
+            AddPetScreen(navController)
         }
     }
 }
