@@ -16,8 +16,22 @@ sealed class BottomNavigationItem(
     val unselectedIcon: ImageVector,
     val route: String
     ) {
-    object Home: BottomNavigationItem("Главная", Icons.Filled.Home, Icons.Outlined.Home, Routs.HomeScreen.route )
-    object Pets: BottomNavigationItem("Питомцы", Icons.Filled.Email, Icons.Outlined.Email, Routs.PetsScreen.route )
-    object Profile: BottomNavigationItem("Профиль", Icons.Filled.AccountCircle, Icons.Outlined.AccountCircle, Routs.ProfileScreen.route )
-
+    object Home: BottomNavigationItem(
+        "Главная",
+        Icons.Filled.Home,
+        Icons.Outlined.Home,
+        Routs.MainScreen.route
+    )
+    object Pets: BottomNavigationItem(
+        "Питомцы",
+        Icons.Filled.Email,
+        Icons.Outlined.Email,
+        Routs.PetsScreen.route
+    )
+    object Profile: BottomNavigationItem(
+        "Профиль",
+        Icons.Filled.AccountCircle,
+        Icons.Outlined.AccountCircle,
+        Routs.ProfileScreen.route
+    )
 }

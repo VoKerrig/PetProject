@@ -1,5 +1,6 @@
 package ru.startandroid.develop.autentification.petsscreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,32 +10,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.startandroid.develop.autentification.R
 import ru.startandroid.develop.autentification.Routs
-import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
-import ru.startandroid.develop.autentification.roomdb.MainViewModel
 
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PetsScreen(
     navController: NavController,
-    navData: MainScreenDataObject,
-    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
+//    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
 ) {
-    val itemsList = mainViewModel.itemsList.collectAsState(initial = emptyList())
+//    val itemsList = mainViewModel.itemsList.collectAsState(initial = emptyList())
+
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
 
     Column(
         modifier = Modifier
@@ -46,8 +45,8 @@ fun PetsScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.4f),
-            contentAlignment = Alignment.BottomCenter
+                .fillMaxHeight(0.3f),
+            contentAlignment = Alignment.Center
         ){
             Image(
                 modifier = Modifier.size(230.dp),
@@ -59,31 +58,15 @@ fun PetsScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.7f)
+                .fillMaxHeight(0.85f)
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp)
-            ) {
-                items(itemsList.value){ item ->
-                    ListItem(
-                        item, {
-                        mainViewModel.nameEntity = it
-                        mainViewModel.newText.value = it.name
-                        },
-                        {
-                            mainViewModel.deleteItem(it)
-                        }
-                    )
-                }
-            }
+
         }
 
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+                .padding(start = 20.dp, end = 20.dp),
             onClick = {
                 navController.navigate(Routs.AddPetScreen.route)
             }

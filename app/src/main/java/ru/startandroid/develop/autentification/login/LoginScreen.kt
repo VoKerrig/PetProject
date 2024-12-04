@@ -48,10 +48,10 @@ fun LoginScreen(
 ) {
 
     var emailState by remember {
-        mutableStateOf("")
+        mutableStateOf("qwerty1@mail.ru")
     }
     var passwordState by remember {
-        mutableStateOf("")
+        mutableStateOf("1234567890")
     }
 
     val authState = authViewModel.authState.observeAsState()

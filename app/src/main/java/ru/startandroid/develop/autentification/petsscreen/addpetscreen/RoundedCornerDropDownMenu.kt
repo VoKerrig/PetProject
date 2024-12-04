@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,10 +21,10 @@ import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
 @Composable
 fun RoundedCornerDropDownMenu(
-    onOptionSelected: (String) -> Unit
+    onItemSelected: (String) -> Unit
 ) {
     val expanded = remember { mutableStateOf(false ) }
-    val selectedOption = remember { mutableStateOf( "Пол") }
+    val selectedItem = remember { mutableStateOf( "Пол") }
     val list = listOf(
         "Мужской",
         "Женский"
@@ -43,20 +42,20 @@ fun RoundedCornerDropDownMenu(
             }
             .padding(20.dp)
     ){
-        Text(text = selectedOption.value)
+        Text(text = selectedItem.value)
         DropdownMenu(
             expanded = expanded.value,
             onDismissRequest = {
                 expanded.value = false
             }) {
-            list.forEach { option ->
+            list.forEach { item ->
                 DropdownMenuItem(text = {
-                    Text(text = option)
+                    Text(text = item)
                 },
                     onClick = {
-                        selectedOption.value = option
+                        selectedItem.value = item
                         expanded.value = false
-                        onOptionSelected(option)
+                        onItemSelected(item)
                     })
             }
         }

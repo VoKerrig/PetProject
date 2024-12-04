@@ -13,13 +13,14 @@ import ru.startandroid.develop.autentification.login.data.LoginScreenObject
 import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
 import ru.startandroid.develop.autentification.login.data.SignUpScreenObject
 import ru.startandroid.develop.autentification.mainscreen.MainScreen
+import ru.startandroid.develop.autentification.petsscreen.PetsScreen
 import ru.startandroid.develop.autentification.petsscreen.addpetscreen.AddPetScreen
 
 @Composable
 fun AppNavigation(authViewModel: AuthViewModel){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = LoginScreenObject ) {
+    NavHost(navController = navController, startDestination = LoginScreenObject) {
         composable<LoginScreenObject> {
             LoginScreen(navController, authViewModel) { navData ->
                 navController.navigate(navData)
@@ -27,7 +28,7 @@ fun AppNavigation(authViewModel: AuthViewModel){
         }
         composable<MainScreenDataObject> { navEntry ->
             val navData = navEntry.toRoute<MainScreenDataObject>()
-            MainScreen(navController, authViewModel, navData)
+            MainScreen(authViewModel, navData)
         }
         composable<SignUpScreenObject>{
             SignUpScreen(navController, authViewModel) { navData ->
@@ -36,6 +37,20 @@ fun AppNavigation(authViewModel: AuthViewModel){
         }
         composable<AddPetScreenObject>{
             AddPetScreen(navController)
+        }
+        composable(Routs.PetsScreen.route) {
+            PetsScreen(navController)
+        }
+        composable(Routs.ProfileScreen.route) {
+            ProfileScreen()
+        }
+        composable(Routs.AddPetScreen.route){
+            AddPetScreen(navController)
+        }
+        composable(Routs.MainScreen.route){
+                navEntry ->
+            val navData = navEntry.toRoute<MainScreenDataObject>()
+            MainScreen(authViewModel, navData)
         }
     }
 }

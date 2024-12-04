@@ -1,5 +1,6 @@
 package ru.startandroid.develop.autentification.petsscreen.addpetscreen
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,33 +16,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil3.compose.rememberAsyncImagePainter
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import ru.startandroid.develop.autentification.R
-import ru.startandroid.develop.autentification.Routs
 import ru.startandroid.develop.autentification.roomdb.MainViewModel
 import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddPetScreen(
     navController: NavController,
     mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
 ) {
+
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+
     var selectedPol = "Не указано"
     val name = remember {
         mutableStateOf("")
@@ -65,7 +66,7 @@ fun AddPetScreen(
     val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) {
-        uri ->
+            uri ->
         selectedImageUri.value = uri
     }
 
@@ -82,13 +83,12 @@ fun AddPetScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.padding(top = 150.dp),
+            modifier = Modifier.padding(top = 100.dp),
             fontSize = 36.sp,
             color = CorgiColor,
             text = "Карточка питомца")
 
         Spacer(modifier = Modifier.padding(top = 50.dp))
-
 //        AddPetTextField(
 //            value = mainViewModel.newText.value,
 //            label = "Кличка",
@@ -96,7 +96,6 @@ fun AddPetScreen(
 //                mainViewModel.newText.value = it
 //            }
 //        )
-
         AddPetTextField(
             value = name.value,
             label = "Кличка"
@@ -124,8 +123,8 @@ fun AddPetScreen(
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
-        RoundedCornerDropDownMenu { selectedItem ->
-            selectedPol = selectedItem
+        RoundedCornerDropDownMenu {
+                selectedItem -> selectedPol = selectedItem
         }
 
         Spacer(modifier = Modifier.padding(top = 10.dp))

@@ -15,7 +15,7 @@ sealed class NavigationDrawerItem(
     val unselectedIcon: ImageVector,
     val route: String,
 ) {
-    object Main: NavigationDrawerItem("Главная", Icons.Filled.Home,Icons.Filled.Home, Routs.HomeScreen.route)
+    object Main: NavigationDrawerItem("Главная", Icons.Filled.Home,Icons.Filled.Home, Routs.MainScreen.route)
     object Info: NavigationDrawerItem("Инфо", Icons.Filled.Info, Icons.Filled.Info, Routs.LoginScreen.route)
     object Settings: NavigationDrawerItem("Профиль", Icons.Filled.Settings, Icons.Filled.Settings, Routs.LoginScreen.route)
 }
