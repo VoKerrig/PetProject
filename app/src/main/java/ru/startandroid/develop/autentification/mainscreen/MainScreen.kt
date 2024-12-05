@@ -126,7 +126,7 @@ fun MainScreen(
         ) { paddingValues ->
             NavHost(navController = navController, startDestination = BottomNavigationItem.Home.route, modifier = Modifier.padding(paddingValues)) {
                 composable(BottomNavigationItem.Home.route) {
-                    HomeScreen()
+                    HomeScreen(authViewModel)
                 }
                 composable(BottomNavigationItem.Pets.route) {
                     PetsScreen(navController)

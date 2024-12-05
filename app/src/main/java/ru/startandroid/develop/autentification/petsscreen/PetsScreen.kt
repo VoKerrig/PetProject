@@ -5,11 +5,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,13 +31,12 @@ import ru.startandroid.develop.autentification.Routs
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PetsScreen(
-    navController: NavController,
-//    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
+    navController: NavController
 ) {
-//    val itemsList = mainViewModel.itemsList.collectAsState(initial = emptyList())
-
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+
+    val lazyListState: LazyListState = rememberLazyListState()
 
     Column(
         modifier = Modifier
@@ -55,12 +58,15 @@ fun PetsScreen(
             )
         }
 
+        LazyColumn(state = lazyListState) {  }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.85f)
         ) {
-
+            PetListItemUI()
+            PetListItemUI()
         }
 
         Button(

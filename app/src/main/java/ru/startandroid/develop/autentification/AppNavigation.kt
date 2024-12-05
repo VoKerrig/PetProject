@@ -44,9 +44,6 @@ fun AppNavigation(authViewModel: AuthViewModel){
         composable(Routs.ProfileScreen.route) {
             ProfileScreen()
         }
-        composable(Routs.AddPetScreen.route){
-            AddPetScreen(navController)
-        }
         composable(Routs.MainScreen.route){
                 navEntry ->
             val navData = navEntry.toRoute<MainScreenDataObject>()

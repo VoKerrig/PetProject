@@ -21,10 +21,11 @@ import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
 @Composable
 fun RoundedCornerDropDownMenu(
+    defPol: String,
     onItemSelected: (String) -> Unit
 ) {
     val expanded = remember { mutableStateOf(false ) }
-    val selectedItem = remember { mutableStateOf( "Пол") }
+    val selectedItem = remember { mutableStateOf( defPol) }
     val list = listOf(
         "Мужской",
         "Женский"

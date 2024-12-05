@@ -37,13 +37,14 @@ import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 @Composable
 fun AddPetScreen(
     navController: NavController,
-    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory)
 ) {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
-    var selectedPol = "Не указано"
+    var selectedPol = remember {
+        mutableStateOf("Пол")
+    }
     val name = remember {
         mutableStateOf("")
     }
@@ -89,13 +90,7 @@ fun AddPetScreen(
             text = "Карточка питомца")
 
         Spacer(modifier = Modifier.padding(top = 50.dp))
-//        AddPetTextField(
-//            value = mainViewModel.newText.value,
-//            label = "Кличка",
-//            onValueChange = {
-//                mainViewModel.newText.value = it
-//            }
-//        )
+
         AddPetTextField(
             value = name.value,
             label = "Кличка"
@@ -123,8 +118,8 @@ fun AddPetScreen(
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
-        RoundedCornerDropDownMenu {
-                selectedItem -> selectedPol = selectedItem
+        RoundedCornerDropDownMenu(selectedPol.value) {
+                selectedItem -> selectedPol.value = selectedItem
         }
 
         Spacer(modifier = Modifier.padding(top = 10.dp))
@@ -155,7 +150,7 @@ fun AddPetScreen(
                         name = name.value,
                         breed = breed.value,
                         age = age.value,
-                        pol = selectedPol
+                        pol = selectedPol.value
                     ),
                     onSaved = {
                         navController.popBackStack()
