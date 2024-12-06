@@ -12,19 +12,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import ru.startandroid.develop.autentification.R
+import ru.startandroid.develop.autentification.petsscreen.addpetscreen.Pet
 
 @Composable
-fun PetListItemUI() {
+fun PetListItemUI(pet: Pet) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +30,7 @@ fun PetListItemUI() {
             .padding(10.dp)
     ) {
         AsyncImage(
-            model = R.drawable.photo,
+            model = pet.imageUrl,
             contentDescription = "",
             modifier = Modifier
                 .clip(RoundedCornerShape(30.dp))
@@ -43,15 +41,15 @@ fun PetListItemUI() {
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Кличка",
+            Text(text = pet.name,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp
             )
             Spacer(modifier = Modifier.height(5.dp))
-            Text(text = "Порода",
+            Text(text = pet.breed,
                 fontSize = 16.sp)
-            Text(text = "Пол",
+            Text(text = pet.pol,
                 fontSize = 16.sp)
         }
     }
