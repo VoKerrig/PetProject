@@ -36,15 +36,12 @@ import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddPetScreen(
-    navController: NavController,
+    navController: NavController
 ) {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
-    var selectedPol = remember {
-        mutableStateOf("Пол")
-    }
     val name = remember {
         mutableStateOf("")
     }
@@ -53,6 +50,9 @@ fun AddPetScreen(
     }
     val age = remember {
         mutableStateOf("")
+    }
+    var selectedPol = remember {
+        mutableStateOf("Пол")
     }
     val selectedImageUri = remember {
         mutableStateOf<Uri?>(null)

@@ -1,5 +1,6 @@
 package ru.startandroid.develop.autentification.petsscreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,12 +23,16 @@ import coil3.compose.AsyncImage
 import ru.startandroid.develop.autentification.petsscreen.addpetscreen.Pet
 
 @Composable
-fun PetListItemUI(pet: Pet) {
+fun PetListItemUI(
+    pet: Pet,
+    onPetClick: (Pet) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)
             .padding(10.dp)
+            .clickable { onPetClick(pet) }
     ) {
         AsyncImage(
             model = pet.imageUrl,

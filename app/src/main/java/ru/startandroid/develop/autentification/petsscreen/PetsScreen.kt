@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -39,7 +40,8 @@ import ru.startandroid.develop.autentification.petsscreen.addpetscreen.Pet
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PetsScreen(
-    navController: NavController
+    navController: NavController,
+    onPetClick: (Pet) -> Unit
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -70,7 +72,9 @@ fun PetsScreen(
             contentAlignment = Alignment.Center
         ){
             Image(
-                modifier = Modifier.size(230.dp),
+                modifier = Modifier
+                    .size(230.dp)
+                    .padding(top = 10.dp),
                 painter = painterResource(id = R.drawable.pets_screen),
                 contentDescription ="top_petsScreen",
             )
@@ -83,7 +87,12 @@ fun PetsScreen(
                 .fillMaxHeight(0.85f)
         ) {
             items(petsListState.value){pet ->
-                PetListItemUI(pet)
+                PetListItemUI(
+                    pet,
+                    onPetClick = {
+                        onPetClick(it)
+                    }
+                )
             }
         }
 

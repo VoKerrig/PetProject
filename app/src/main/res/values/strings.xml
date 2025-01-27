@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Autentification</string>
+    <string name="name">Кличка:</string>
+    <string name="breed">Порода:</string>
 </resources>

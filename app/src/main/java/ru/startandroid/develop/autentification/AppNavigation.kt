@@ -13,8 +13,9 @@ import ru.startandroid.develop.autentification.login.data.LoginScreenObject
 import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
 import ru.startandroid.develop.autentification.login.data.SignUpScreenObject
 import ru.startandroid.develop.autentification.mainscreen.MainScreen
-import ru.startandroid.develop.autentification.petsscreen.PetsScreen
 import ru.startandroid.develop.autentification.petsscreen.addpetscreen.AddPetScreen
+import ru.startandroid.develop.autentification.petsscreen.detailscreen.data.DetailsNavObject
+import ru.startandroid.develop.autentification.petsscreen.detailscreen.ui.DetailsScreen
 
 @Composable
 fun AppNavigation(authViewModel: AuthViewModel){
@@ -37,9 +38,6 @@ fun AppNavigation(authViewModel: AuthViewModel){
         }
         composable<AddPetScreenObject>{
             AddPetScreen(navController)
-        }
-        composable(Routs.PetsScreen.route) {
-            PetsScreen(navController)
         }
         composable(Routs.ProfileScreen.route) {
             ProfileScreen()

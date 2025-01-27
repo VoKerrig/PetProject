@@ -27,6 +27,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import kotlinx.coroutines.launch
 import ru.startandroid.develop.autentification.HomeScreen
 import ru.startandroid.develop.autentification.ProfileScreen
@@ -38,6 +39,8 @@ import ru.startandroid.develop.autentification.mainscreen.bottom_navigation.Navi
 import ru.startandroid.develop.autentification.mainscreen.navigation_drawer_profile.NavigationDrawerItem
 import ru.startandroid.develop.autentification.petsscreen.PetsScreen
 import ru.startandroid.develop.autentification.petsscreen.addpetscreen.AddPetScreen
+import ru.startandroid.develop.autentification.petsscreen.detailscreen.data.DetailsNavObject
+import ru.startandroid.develop.autentification.petsscreen.detailscreen.ui.DetailsScreen
 import ru.startandroid.develop.autentification.ui.theme.BarColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -129,13 +132,30 @@ fun MainScreen(
                     HomeScreen(authViewModel)
                 }
                 composable(BottomNavigationItem.Pets.route) {
-                    PetsScreen(navController)
+                    PetsScreen(
+                        navController,
+                        onPetClick = {
+                            navController.navigate(
+                                DetailsNavObject(
+                                name = it.name,
+                                breed = it.breed,
+                                age = it.age,
+                                pol = it.pol,
+                                imageUrl = it.imageUrl
+                                )
+                            )
+                        })
                 }
                 composable(BottomNavigationItem.Profile.route) {
                     ProfileScreen()
                 }
                 composable(Routs.AddPetScreen.route){
                     AddPetScreen(navController)
+                }
+                composable<DetailsNavObject>{
+                        navEntry ->
+                    val navData = navEntry.toRoute<DetailsNavObject>()
+                    DetailsScreen(navData)
                 }
             }
         }
