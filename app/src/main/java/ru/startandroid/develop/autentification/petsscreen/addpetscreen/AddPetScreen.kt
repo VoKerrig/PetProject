@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import ru.startandroid.develop.autentification.R
 import ru.startandroid.develop.autentification.roomdb.MainViewModel
 import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
@@ -87,13 +89,13 @@ fun AddPetScreen(
             modifier = Modifier.padding(top = 100.dp),
             fontSize = 36.sp,
             color = CorgiColor,
-            text = "Карточка питомца")
+            text = stringResource(R.string.pet_blank))
 
         Spacer(modifier = Modifier.padding(top = 50.dp))
 
         AddPetTextField(
             value = name.value,
-            label = "Кличка"
+            label = stringResource(R.string.pet_name)
         ) {
             name.value = it
         }
@@ -102,7 +104,7 @@ fun AddPetScreen(
 
         AddPetTextField(
             value = breed.value,
-            label = "Порода"
+            label = stringResource(R.string.pet_breed)
         ) {
             breed.value = it
         }
@@ -111,7 +113,7 @@ fun AddPetScreen(
 
         AddPetTextFieldAge(
             value = age.value,
-            label = "Возраст"
+            label = stringResource(R.string.pet_age)
         ) {
             age.value = it
         }
@@ -132,7 +134,7 @@ fun AddPetScreen(
                 imageLauncher.launch("image/*")
             }
         ) {
-            Text(text = "Добавить фото")
+            Text(text = stringResource(R.string.pet_add_photo_button))
         }
 
         Spacer(modifier = Modifier.padding(top = 50.dp))
@@ -159,7 +161,7 @@ fun AddPetScreen(
                 )
             }
         ) {
-            Text(text = "Готово")
+            Text(text = stringResource(R.string.pet_add_button))
         }
     }
 }

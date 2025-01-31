@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
@@ -82,14 +83,14 @@ fun SignUpScreen(
         ) {
             EmailTextField(
                 text = emailState,
-                label = "mail@example.com"
+                label = stringResource(R.string.emailTextField_label)
             ) {
                 emailState = it
             }
             Spacer(modifier = Modifier.height(10.dp))
             PasswordTextField(
                 text = passwordState,
-                label = "Password"
+                label = stringResource(R.string.passTextField_label)
             ) {
                 passwordState = it
             }
@@ -103,14 +104,14 @@ fun SignUpScreen(
                     }
                 )
             }) {
-                Text(text = "Register")
+                Text(text = stringResource(R.string.signUp_button))
             }
             Spacer(modifier = Modifier.height(10.dp))
 
             TextButton(onClick = {
                 navController.navigate(LoginScreenObject)
             }) {
-                Text(text = "Уже регистрировались? Войти")
+                Text(text = stringResource(R.string.to_LoginScreen_button))
             }
         }
 
@@ -118,7 +119,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BarColor),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.BottomCenter
         ) {
             Image(
                 modifier = Modifier.size(350.dp),

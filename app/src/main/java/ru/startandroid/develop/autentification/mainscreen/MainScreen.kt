@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -31,6 +32,7 @@ import androidx.navigation.toRoute
 import kotlinx.coroutines.launch
 import ru.startandroid.develop.autentification.HomeScreen
 import ru.startandroid.develop.autentification.ProfileScreen
+import ru.startandroid.develop.autentification.R
 import ru.startandroid.develop.autentification.Routs
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
 import ru.startandroid.develop.autentification.login.data.MainScreenDataObject
@@ -110,7 +112,7 @@ fun MainScreen(
                         containerColor = BarColor
                     ),
                     title = {
-                        Text(text = "Дружок")
+                        Text(text = stringResource(R.string.top_bar_title))
                     },
                     navigationIcon = {
                         IconButton(onClick = {

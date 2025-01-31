@@ -5,9 +5,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavController
 import ru.startandroid.develop.autentification.Routs
-import ru.startandroid.develop.autentification.authentication.AuthViewModel
 
 sealed class NavigationDrawerItem(
     val title: String,

@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
@@ -81,14 +82,14 @@ fun LoginScreen(
         ) {
             EmailTextField(
                 text = emailState,
-                label = "mail@example.com"
+                label = stringResource(R.string.emailTextField_label)
             ) {
                 emailState = it
             }
             Spacer(modifier = Modifier.height(10.dp))
             PasswordTextField(
                 text = passwordState,
-                label = "Password"
+                label = stringResource(R.string.passTextField_label)
             ) {
                 passwordState = it
             }
@@ -104,7 +105,7 @@ fun LoginScreen(
                     }
                 )
             }) {
-                Text(text = "Login")
+                Text(text = stringResource(R.string.signIn_button))
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -112,7 +113,7 @@ fun LoginScreen(
             TextButton(onClick = {
                 navController.navigate(SignUpScreenObject)
             }) {
-                Text(text = "Нет аккаунта? Зарегистрируйтесь")
+                Text(text = stringResource(R.string.to_LoginScreen_button))
             }
         }
 
