@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "ru.startandroid.develop.autentification"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -62,12 +62,20 @@ dependencies {
 
     implementation(libs.androidx.room)
     implementation(libs.firebase.storage)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.ui.viewbinding)
     annotationProcessor(libs.androidx.room.annotation.processor)
     ksp(libs.androidx.room.annotation.processor)
     implementation(libs.androidx.room.room.ktx)
 
     implementation(libs.coil.kt)
     implementation(libs.coil.network.okhttp)
+
+    implementation(libs.maps)
+    implementation(libs.maps.location)
+    implementation(libs.maps.places)
+    implementation(libs.maps.places.ktx)
+    implementation(libs.maps.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -22,7 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil3.compose.rememberAsyncImagePainter
@@ -32,7 +31,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import ru.startandroid.develop.autentification.R
-import ru.startandroid.develop.autentification.roomdb.MainViewModel
 import ru.startandroid.develop.autentification.ui.theme.CorgiColor
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

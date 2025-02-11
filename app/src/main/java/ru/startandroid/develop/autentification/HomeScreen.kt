@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import ru.startandroid.develop.autentification.authentication.AuthViewModel
 
-
 @Composable
 fun HomeScreen(
     authViewModel: AuthViewModel

@@ -22,6 +22,13 @@ kspVersion = "2.0.20-1.0.24"
 serializationVersion = "2.0.21"
 serializationKotlin = "1.7.3"
 coilKt = "3.0.4"
+maps = "18.1.0"
+mapsLocation = "21.0.1"
+mapsCompose = "4.3.0"
+mapsPlaces = "2.6.0"
+mapsPlacesKtx = "2.0.0"
+composeMaterial3 = "1.0.0-alpha32"
+uiViewbinding = "1.7.7"
 
 
 [libraries]
@@ -56,6 +63,14 @@ coil-kt = {module = "io.coil-kt.coil3:coil-compose" , version.ref = "coilKt" }
 coil-network-okhttp = {module = "io.coil-kt.coil3:coil-network-okhttp" , version.ref = "coilKt" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationKotlin" }
+
+maps = { module = "com.google.android.gms:play-services-maps", version.ref = "maps" }
+maps-location = { module = "com.google.android.gms:play-services-location", version.ref = "mapsLocation" }
+maps-places = { module = "com.google.android.libraries.places:places", version.ref = "mapsPlaces" }
+maps-places-ktx = { module = "com.google.maps.android:places-ktx", version.ref = "mapsPlacesKtx" }
+maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+androidx-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "composeMaterial3" }
+androidx-ui-viewbinding = { group = "androidx.compose.ui", name = "ui-viewbinding", version.ref = "uiViewbinding" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

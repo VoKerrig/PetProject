@@ -104,7 +104,8 @@ fun MainScreen(
             }
         },
         drawerState = drawerState
-    ) {
+    )
+    {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -139,11 +140,11 @@ fun MainScreen(
                         onPetClick = {
                             navController.navigate(
                                 DetailsNavObject(
-                                name = it.name,
-                                breed = it.breed,
-                                age = it.age,
-                                pol = it.pol,
-                                imageUrl = it.imageUrl
+                                    name = it.name,
+                                    breed = it.breed,
+                                    age = it.age,
+                                    pol = it.pol,
+                                    imageUrl = it.imageUrl
                                 )
                             )
                         })
